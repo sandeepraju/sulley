@@ -1,0 +1,19 @@
+{
+    "host": "127.0.0.1",
+    "port": "5000",
+    "provider": {
+        "name": "plivo",
+        "key": "plivo-auth-id",
+        "secret": "plivo-auth-token",
+        "phone": "+12345678901",
+        "url": "/sulley/",
+        "methods": ["GET"]
+    },
+    "users": [
+        {
+            "name": "John Doe",
+            "phone": "+10000000000",
+            "role": "admin"
+        }
+    ]
+}
