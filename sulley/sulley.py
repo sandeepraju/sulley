@@ -5,6 +5,7 @@ from message import Message
 from matcher import Matcher
 from providers import plivo
 
+
 class Sulley(object):
     def __init__(self, *args, **kwargs):
         self._config = Config()
@@ -14,7 +15,8 @@ class Sulley(object):
         self._provider = plivo.Plivo(
             key=self._config.provider['key'],
             secret=self._config.provider['secret'],
-            phone=self._config.provider['phone'][1:])  # NOTE: ignore +1 for plivo
+            # NOTE: ignore +1 for plivo
+            phone=self._config.provider['phone'][1:])
 
         # TODO: register global flask handler
         self._app.add_url_rule(
@@ -24,11 +26,11 @@ class Sulley(object):
 
     def default(self, func):
         self.default
+
         def wrapper_func(*args):
             func(*args)
 
         wrapper_func.__name__ == func.__name__
-
         self._default_handler = wrapper_func
         
         return wrapper_func
