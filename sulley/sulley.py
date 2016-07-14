@@ -8,11 +8,11 @@ from providers import plivo
 
 class Sulley(object):
     def __init__(self, *args, **kwargs):
-        self._config = Config()
+        self._config = Config()  # TODO: inject the dependency?
         self._app = Flask(self.__class__.__name__)
         self._matcher = Matcher()
         self._default_handler = lambda x: x
-        self._provider = plivo.Plivo(
+        self._provider = plivo.Plivo(  # TODO: inject the dependency?
             key=self._config.provider['key'],
             secret=self._config.provider['secret'],
             # NOTE: ignore +1 for plivo
@@ -62,11 +62,11 @@ class Sulley(object):
     def _sms_handler(self):
         # TODO multiple methods
         from_number = request.args.get('From')
-        message = request.args.get('Text')
-        func = self._matcher.match(message) or self._default_handler
+        text = request.args.get('Text')
+        func = self._matcher.match(text) or self._default_handler
 
         # TODO: wish this was async
-        func(Message(from_number, message, self._provider))
+        func(Message(from_number, text, self._provider))
         
         # TODO: handle providers
         xml = '<Response></Response>'
