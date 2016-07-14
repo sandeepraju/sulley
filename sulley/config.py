@@ -1,6 +1,7 @@
 import json
 import os
 
+
 class Config(object):
     def __init__(self, *args, **kwargs):
         self._config = self._load()

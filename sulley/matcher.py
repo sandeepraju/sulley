@@ -1,5 +1,6 @@
 import re
 
+
 class Matcher(object):
     def __init__(self, *args, **kwargs):
         self._pairs = []
@@ -13,7 +14,8 @@ class Matcher(object):
             idx = filter(lambda x: x[0].pattern == pattern, self._pairs)[0]
             self._pairs.pop(idx)
         except Exception as e:
-            # pattern not found. Nothing to do.
+            # pattern not found.
+            # TODO: log the message here
             pass
 
     def match(self, pattern):
