@@ -18,5 +18,5 @@ uninstall:
 	yes | pip uninstall sulley
 
 test:
-	python -m tests
+	python -m unittest discover -s ./tests -p 'test_*.py'
 
