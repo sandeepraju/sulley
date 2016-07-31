@@ -2,9 +2,9 @@
     "host": "127.0.0.1",
     "port": "5000",
     "provider": {
-        "name": "plivo",
-        "key": "plivo-auth-id",
-        "secret": "plivo-auth-token",
+        "name": "twilio",
+        "key": "twilio-account-sid",
+        "secret": "twilio-auth-token",
         "phone": "+12345678901",
         "url": "/sulley/",
         "methods": ["GET"]
