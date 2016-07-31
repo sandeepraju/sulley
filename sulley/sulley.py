@@ -32,9 +32,9 @@ class Sulley(object):
 
         wrapper_func.__name__ == func.__name__
         self._default_handler = wrapper_func
-        
+
         return wrapper_func
-        
+
     def reply_to(self, regex, *args, **kwargs):
         # TODO: add option to turn case senstivity on and off
         # pass pattern object directly
@@ -55,19 +55,24 @@ class Sulley(object):
 
             # return the wrapper when the function gets decorated
             return wrapper_func
-        
+
         # return the wrapper generator
         return handler_wrapper
 
     def _sms_handler(self):
-        # TODO multiple methods
+        # TODO handle request params for both GET and POST request
         from_number = request.args.get('From')
         text = request.args.get('Text')
+
+        if from_number is None or text is None:
+            # both parameters are mandatory
+            return '', 400
+
         func = self._matcher.match(text) or self._default_handler
 
         # TODO: wish this was async
         func(Message(from_number, text, self._provider))
-        
+
         # TODO: handle providers
         xml = '<Response></Response>'
         return Response(xml, mimetype='text/xml')
