@@ -30,6 +30,7 @@ class Sulley(object):
         def wrapper_func(*args):
             func(*args)
 
+        # TODO: use wraps to cleanly do this.
         wrapper_func.__name__ == func.__name__
         self._default_handler = wrapper_func
 
@@ -42,6 +43,7 @@ class Sulley(object):
         def handler_wrapper(handler):
             # create a wrapper
             def wrapper_func(*args):
+                # TODO: remove this
                 print '----- begin -----'
                 # call the function that is being wrapped
                 handler(*args)
