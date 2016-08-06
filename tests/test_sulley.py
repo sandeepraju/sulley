@@ -233,12 +233,66 @@ class TestSulley(unittest.TestCase):
                 'From': '+12345678901', 'Text': 'Hey'})).data,
                          '<?xml version="1.0" encoding="UTF-8"?><Response></Response>')
 
-    def test_sulley_pattern_match(self):
+    def test_sulley_pattern_exact_match(self):
         sulley = Sulley(
             config=self.mockedConfig,
             app=Flask(self.__class__.__name__),
             matcher=Matcher(),
             provider=self.mockedProvider)
+
+        @sulley.reply_to('abc')
+        def abc(message):
+            message.reply('world')
+
+        @sulley.default
+        def default(message):
+            message.reply('hello')
+
+        test_app = sulley._app.test_client()
+        self.assertEqual(test_app.get(
+            self.mockedConfig.provider['url'] + '?' + urllib.urlencode({
+                'From': '+12345678901', 'Body': 'abc'})).data,
+                         '<?xml version="1.0" encoding="UTF-8"?><Response></Response>')
+
+        self.mockedProvider.send.assert_called_once_with('+12345678901', 'world')
+
+    def test_sulley_pattern_regex_match(self):
+        sulley = Sulley(
+            config=self.mockedConfig,
+            app=Flask(self.__class__.__name__),
+            matcher=Matcher(),
+            provider=self.mockedProvider)
+
+        @sulley.reply_to('abc')
+        def abc(message):
+            message.reply('world')
+
+        @sulley.reply_to('[0-9]*')
+        def abc(message):
+            message.reply('earth')
+
+        @sulley.default
+        def default(message):
+            message.reply('hello')
+
+        test_app = sulley._app.test_client()
+        self.assertEqual(test_app.get(
+            self.mockedConfig.provider['url'] + '?' + urllib.urlencode({
+                'From': '+12345678901', 'Body': '123'})).data,
+                         '<?xml version="1.0" encoding="UTF-8"?><Response></Response>')
+
+        self.mockedProvider.send.assert_called_once_with('+12345678901', 'earth')
+
+    def test_sulley_pattern_doesnt_match(self):
+        sulley = Sulley(
+            config=self.mockedConfig,
+            app=Flask(self.__class__.__name__),
+            matcher=Matcher(),
+            provider=self.mockedProvider)
+
+        @sulley.reply_to('abc')
+        def abc(message):
+            message.reply('world')
 
         @sulley.default
         def default(message):
@@ -252,8 +306,33 @@ class TestSulley(unittest.TestCase):
 
         self.mockedProvider.send.assert_called_once_with('+12345678901', 'hello')
 
-    def test_sulley_pattern_doesnt_match(self):
-        pass
-
     def test_sulley_multi_pattern_registration(self):
-        pass
+        sulley = Sulley(
+            config=self.mockedConfig,
+            app=Flask(self.__class__.__name__),
+            matcher=Matcher(),
+            provider=self.mockedProvider)
+
+        @sulley.reply_to('xyz')
+        @sulley.reply_to('abc')
+        def abc(message):
+            message.reply('world')
+
+        @sulley.default
+        def default(message):
+            message.reply('hello')
+
+        test_app = sulley._app.test_client()
+        self.assertEqual(test_app.get(
+            self.mockedConfig.provider['url'] + '?' + urllib.urlencode({
+                'From': '+12345678901', 'Body': 'xyz'})).data,
+                         '<?xml version="1.0" encoding="UTF-8"?><Response></Response>')
+
+        self.mockedProvider.send.assert_called_once_with('+12345678901', 'world')
+
+        self.assertEqual(test_app.get(
+            self.mockedConfig.provider['url'] + '?' + urllib.urlencode({
+                'From': '+12345678901', 'Body': 'abc'})).data,
+                         '<?xml version="1.0" encoding="UTF-8"?><Response></Response>')
+
+        self.mockedProvider.send.assert_called_with('+12345678901', 'world')

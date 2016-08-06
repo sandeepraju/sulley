@@ -46,11 +46,8 @@ class Sulley(object):
             # create a wrapper
             @wraps(handler)
             def wrapper_func(*args):
-                # TODO: remove this
-                print '----- begin -----'
                 # call the function that is being wrapped
                 handler(*args)
-                print '-----  end  -----'
 
             # register the pattern and the callback
             self._matcher.register(regex, wrapper_func)
