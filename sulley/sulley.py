@@ -4,7 +4,8 @@ from functools import wraps
 from config import Config
 from message import Message
 from matcher import Matcher
-from providers import plivo
+from exceptions import InvalidConfig
+from providers import twilio, plivo
 
 
 class Sulley(object):
@@ -12,13 +13,13 @@ class Sulley(object):
         self._config = kwargs.get('config', None) or Config()
         self._app = kwargs.get('app', None) or Flask(self.__class__.__name__)
         self._matcher = kwargs.get('matcher', None) or Matcher()
-        self._default_handler = lambda x: x
+
+        # do nothing by default
+        self._default_handler = lambda x: None
+
         # TODO: add support for provider
-        self._provider = kwargs.get('provider', None) or plivo.Plivo(
-            key=self._config.provider['key'],
-            secret=self._config.provider['secret'],
-            # NOTE: ignore +1 for plivo
-            phone=self._config.provider['phone'][1:])
+        self._provider = kwargs.get('provider', None) or \
+                         self._get_provider_from_config()
 
         # TODO: register global flask handler and return 404 (and 400 when applicable)
         self._app.add_url_rule(
@@ -76,6 +77,22 @@ class Sulley(object):
         # TODO: handle providers
         xml = '<Response></Response>'
         return Response(xml, mimetype='text/xml')
+
+    def _get_provider_from_config(self):
+        provider_name = self._config.provider['name']
+
+        if provider_name == 'twilio':
+            return twilio.Twilio(
+                self._config.provider['key'],
+                self._config.provider['secret'],
+                self._config.provider['phone'])
+        elif provider_name == 'plivo':
+            return plivo.Plivo(
+                self._config.provider['key'],
+                self._config.provider['secret'],
+                self._config.provider['phone'])
+        else:
+            raise InvalidConfig('Invalid provider.')
 
     def run(self, *args, **kwargs):
         self._app.run(*args, **kwargs)

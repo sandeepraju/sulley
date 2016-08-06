@@ -5,6 +5,7 @@ from flask import Flask
 
 from sulley.matcher import Matcher
 from sulley.providers.base import BaseProvider
+from sulley.exceptions import InvalidConfig
 from sulley import Sulley
 
 class TestSulley(unittest.TestCase):
@@ -17,7 +18,7 @@ class TestSulley(unittest.TestCase):
                 "key": "twilio-account-sid",
                 "secret": "twilio-auth-token",
                 "phone": "+12345678901",
-                "url": "/sulley/",
+                "url": "/sulley-test-url/",
                 "methods": ["GET"]
             },
             "users": [
@@ -107,6 +108,49 @@ class TestSulley(unittest.TestCase):
 
         self.assertEqual(test_handler.__name__, 'test_handler')
 
+    def test_sulley_pick_provider_from_configration(self):
+        sulley = Sulley(
+            config=self.mockedConfig,  # contains twilio configured
+            app=self.mockedApp,
+            matcher=self.mockedMatcher)
+
+        # verify if the correct provider was picked
+        # TODO: is there any other clean way to check this other than
+        # accessing the 'pseudo-private' property
+        self.assertEqual(sulley._provider.__class__.__name__, 'Twilio')
+
+    def test_sulley_throw_error_on_invalid_provider(self):
+        self.mockedConfig.provider['name'] = 'invalid'
+
+        with self.assertRaisesRegexp(InvalidConfig, 'Invalid provider.'):
+            Sulley(config=self.mockedConfig,  # contains an invalid provider
+                   app=self.mockedApp,
+                   matcher=self.mockedMatcher)
+
+    def test_sulley_throw_error_on_invalid_phone_number(self):
+        self.mockedConfig.provider['phone'] = '0202'
+        with self.assertRaisesRegexp(
+                InvalidConfig,
+                'Invalid phone number. Phone numbers should be in E.164 format.'):
+            Sulley(config=self.mockedConfig,  # contains an invalid provider
+                   app=self.mockedApp,
+                   matcher=self.mockedMatcher)
+
+    def test_sulley_inbound_sms_url_and_method_from_config(self):
+        # should configure the url & method specified in the config
+        # for inbound sms requests from providers
+        sulley = Sulley(
+            config=self.mockedConfig,
+            app=self.mockedApp,
+            matcher=self.mockedMatcher,
+            provider=self.mockedProvider)
+
+        self.mockedApp.add_url_rule.assert_called_once_with(
+            self.mockedConfig.provider['url'],
+            view_func=sulley._sms_handler,
+            methods=self.mockedConfig.provider['methods']
+        )
+
     def test_sulley_handler_registration(self):
         pass
 
@@ -120,9 +164,6 @@ class TestSulley(unittest.TestCase):
         pass
 
     def test_sulley_url_method_not_allowed(self):
-        pass
-
-    def test_sulley_provider_configration(self):
         pass
 
     def test_sulley_xml_for_twilio(self):
