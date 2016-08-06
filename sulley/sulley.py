@@ -1,4 +1,5 @@
 from flask import Flask, Response, request
+from functools import wraps
 
 from config import Config
 from message import Message
@@ -8,49 +9,46 @@ from providers import plivo
 
 class Sulley(object):
     def __init__(self, *args, **kwargs):
-        self._config = Config()  # TODO: inject the dependency?
-        self._app = Flask(self.__class__.__name__)
-        self._matcher = Matcher()
+        self._config = kwargs.get('config', None) or Config()
+        self._app = kwargs.get('app', None) or Flask(self.__class__.__name__)
+        self._matcher = kwargs.get('matcher', None) or Matcher()
         self._default_handler = lambda x: x
-        self._provider = plivo.Plivo(  # TODO: inject the dependency?
+        # TODO: add support for provider
+        self._provider = kwargs.get('provider', None) or plivo.Plivo(
             key=self._config.provider['key'],
             secret=self._config.provider['secret'],
             # NOTE: ignore +1 for plivo
             phone=self._config.provider['phone'][1:])
 
-        # TODO: register global flask handler
+        # TODO: register global flask handler and return 404 (and 400 when applicable)
         self._app.add_url_rule(
             self._config.provider['url'],
             view_func=self._sms_handler,
             methods=self._config.provider['methods'])
 
     def default(self, func):
-        self.default
-
+        # wrap the passed handler
+        @wraps(func)
         def wrapper_func(*args):
             func(*args)
 
-        # TODO: use wraps to cleanly do this.
-        wrapper_func.__name__ == func.__name__
+        # attach the passed handler as default handler
         self._default_handler = wrapper_func
 
         return wrapper_func
 
     def reply_to(self, regex, *args, **kwargs):
-        # TODO: add option to turn case senstivity on and off
-        # pass pattern object directly
+        # TODO: add option to pass pattern object directly
         # create a wrapper generator
         def handler_wrapper(handler):
             # create a wrapper
+            @wraps(handler)
             def wrapper_func(*args):
                 # TODO: remove this
                 print '----- begin -----'
                 # call the function that is being wrapped
                 handler(*args)
                 print '-----  end  -----'
-
-            # fake the name of the wrapper function
-            wrapper_func.__name__ = handler.__name__
 
             # register the pattern and the callback
             self._matcher.register(regex, wrapper_func)

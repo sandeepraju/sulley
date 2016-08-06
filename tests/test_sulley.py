@@ -78,3 +78,61 @@ class TestSulley(unittest.TestCase):
         # with few flask params
         sulley.run(debug=True)
         self.mockedApp.run.assert_called_once_with(debug=True)
+
+    def test_sulley_default_decorator_wrap_side_effects(self):
+        sulley = Sulley(
+            config=self.mockedConfig,
+            app=self.mockedApp,
+            matcher=self.mockedMatcher,
+            provider=self.mockedProvider)
+
+        # define a function to be sent as a handler
+        @sulley.default
+        def test_handler(message):
+            pass
+
+        self.assertEqual(test_handler.__name__, 'test_handler')
+
+    def test_sulley_reply_to_decorator_wrap_side_effects(self):
+        sulley = Sulley(
+            config=self.mockedConfig,
+            app=self.mockedApp,
+            matcher=self.mockedMatcher,
+            provider=self.mockedProvider)
+
+        # define a function to be sent as a handler
+        @sulley.reply_to('something')
+        def test_handler(message):
+            pass
+
+        self.assertEqual(test_handler.__name__, 'test_handler')
+
+    def test_sulley_handler_registration(self):
+        pass
+
+    def test_sulley_url(self):
+        pass
+
+    def test_sulley_url_method(self):
+        pass
+
+    def test_sulley_url_not_found(self):
+        pass
+
+    def test_sulley_url_method_not_allowed(self):
+        pass
+
+    def test_sulley_provider_configration(self):
+        pass
+
+    def test_sulley_xml_for_twilio(self):
+        pass
+
+    def test_sulley_xml_for_plivo(self):
+        pass
+
+    def test_sulley_pattern_match(self):
+        pass
+
+    def test_sulley_pattern_doesnt_match(self):
+        pass
