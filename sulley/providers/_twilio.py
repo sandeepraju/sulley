@@ -5,12 +5,9 @@ from base import BaseProvider
 from sulley import exceptions
 
 class Twilio(BaseProvider):
-    # TODO: doc strings
     def __init__(self, *args, **kwargs):
         super(Twilio, self).__init__(*args, **kwargs)
 
-        # TODO: accept the config in base
-        # TODO: write more testable code.
         self.conn = TwilioRestClient(self.key, self.secret)
 
     def send(self, recipient, message):

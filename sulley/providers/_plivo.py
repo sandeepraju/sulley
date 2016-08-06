@@ -12,7 +12,7 @@ class Plivo(BaseProvider):
 
     def send(self, recipient, message):
         response = self.conn.send_message({
-            'src': self.phone,
+            'src': self.phone[1:],  # strip off the start + for plivo
             'dst': recipient,
             'text': message
         })

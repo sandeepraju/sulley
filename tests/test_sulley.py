@@ -1,6 +1,7 @@
 import unittest
 from mock import Mock, MagicMock
 
+import urllib
 from flask import Flask
 
 from sulley.matcher import Matcher
@@ -193,8 +194,8 @@ class TestSulley(unittest.TestCase):
 
         test_app = sulley._app.test_client()
         self.assertEqual(test_app.get(
-            self.mockedConfig.provider['url'] +
-            '?From=+1234567890&Body=Hey').status_code, 200)
+            self.mockedConfig.provider['url'] + '?' + urllib.urlencode({
+                'From': '+12345678901', 'Body': 'Hey'})).status_code, 200)
 
     def test_sulley_xml_for_twilio(self):
         sulley = Sulley(
@@ -209,7 +210,8 @@ class TestSulley(unittest.TestCase):
 
         test_app = sulley._app.test_client()
         self.assertEqual(test_app.get(
-            self.mockedConfig.provider['url'] + '?From=+1234567890&Body=Hey').data,
+            self.mockedConfig.provider['url'] + '?' + urllib.urlencode({
+                'From': '+12345678901', 'Body': 'Hey'})).data,
                          '<?xml version="1.0" encoding="UTF-8"?><Response></Response>')
 
     def test_sulley_xml_for_plivo(self):
@@ -227,11 +229,28 @@ class TestSulley(unittest.TestCase):
 
         test_app = sulley._app.test_client()
         self.assertEqual(test_app.get(
-            self.mockedConfig.provider['url'] + '?From=+1234567890&Text=Hey').data,
+            self.mockedConfig.provider['url'] + '?' + urllib.urlencode({
+                'From': '+12345678901', 'Text': 'Hey'})).data,
                          '<?xml version="1.0" encoding="UTF-8"?><Response></Response>')
 
     def test_sulley_pattern_match(self):
-        pass
+        sulley = Sulley(
+            config=self.mockedConfig,
+            app=Flask(self.__class__.__name__),
+            matcher=Matcher(),
+            provider=self.mockedProvider)
+
+        @sulley.default
+        def default(message):
+            message.reply('hello')
+
+        test_app = sulley._app.test_client()
+        self.assertEqual(test_app.get(
+            self.mockedConfig.provider['url'] + '?' + urllib.urlencode({
+                'From': '+12345678901', 'Body': 'Hey'})).data,
+                         '<?xml version="1.0" encoding="UTF-8"?><Response></Response>')
+
+        self.mockedProvider.send.assert_called_once_with('+12345678901', 'hello')
 
     def test_sulley_pattern_doesnt_match(self):
         pass
