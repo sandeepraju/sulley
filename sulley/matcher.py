@@ -6,16 +6,14 @@ class Matcher(object):
         self._pairs = []
 
     def register(self, pattern, func):
-        # TODO: check for duplicates?
         self._pairs.append((re.compile(pattern), func))
 
     def deregister(self, pattern):
         try:
-            idx = filter(lambda x: x[0].pattern == pattern, self._pairs)[0]
-            self._pairs.pop(idx)
+            pair = filter(lambda x: x[0].pattern == pattern, self._pairs)[0]
+            self._pairs.remove(pair)
         except Exception as e:
-            # pattern not found.
-            # TODO: log the message here
+            # pattern not found. fail silently
             pass
 
     def match(self, pattern):
