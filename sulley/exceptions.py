@@ -9,3 +9,7 @@ class SulleyError(Exception):
 class ProviderError(Exception):
     def __init__(self, *args, **kwargs):
         super(ProviderError, self).__init__(*args, **kwargs)
+
+class BadRequest(Exception):
+    def __init__(self, *args, **kwargs):
+        super(BadRequest, self).__init__(*args, **kwargs)
