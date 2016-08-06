@@ -19,6 +19,9 @@ setup(
         'twilio==5.4.0',
         'Flask==0.11.1'
     ],
+    tests_require=[
+        'mock==2.0.0'
+    ],
     keywords=[
         'sms', 'message', 'twilio', 'plivo',
         'bot', 'text', 'communication'
