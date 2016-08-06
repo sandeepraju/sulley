@@ -7,7 +7,8 @@ from sulley.message_manager import MessageManager
 
 class TestMessageManager(unittest.TestCase):
     def setUp(self):
-        self.mockedProvider = BaseProvider('test-key', 'test-secret', '+10000000000')
+        self.mockedProvider = BaseProvider(
+            'test-key', 'test-secret', '+10000000000')
         self.mockedProvider.send = MagicMock(return_value=None)
 
         self.message = Message('+1234567890', 'hello, world!')
