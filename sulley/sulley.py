@@ -1,5 +1,6 @@
 from flask import Flask, Response, request
 from functools import wraps
+from werkzeug.exceptions import BadRequest, MethodNotAllowed
 
 from config import Config
 from message import Message
@@ -61,22 +62,61 @@ class Sulley(object):
         return handler_wrapper
 
     def _sms_handler(self):
-        # TODO handle request params for both GET and POST request
-        from_number = request.args.get('From')
-        text = request.args.get('Text')
-
-        if from_number is None or text is None:
-            # both parameters are mandatory
-            return '', 400
+        from_number, text = self._get_request_arguments(request)
 
         func = self._matcher.match(text) or self._default_handler
-
-        # TODO: wish this was async
-        func(Message(from_number, text, self._provider))
+        func(Message(from_number, text, provider=self._provider))
 
         # TODO: handle providers
-        xml = '<Response></Response>'
+        xml = '<?xml version="1.0" encoding="UTF-8"?><Response></Response>'
         return Response(xml, mimetype='text/xml')
+
+    def _get_request_arguments(self, request):
+        provider_name = self._config.provider['name']
+        if provider_name == 'twilio':
+            return self._get_twilio_arguments(request)
+        elif provider_name == 'plivo':
+            return self._get_plivo_arguments(request)
+
+    def _get_twilio_arguments(self, request):
+        if request.method == 'GET':
+            from_number = request.args.get('From')
+            text = request.args.get('Body')
+            if from_number is None or text is None:
+                raise BadRequest('Both `From` and `Body` parameters are mandatory.')
+
+            return from_number, text
+
+        elif request.method == 'POST':
+            from_number = request.form.get('From', None)
+            text = request.form.get('Body', None)
+            if from_number is None or text is None:
+                raise BadRequest('Both `From` and `Body` parameters are mandatory.')
+
+            return from_number, text
+
+        else:
+            raise MethodNotAllowed('Only GET and POST methods are allowed.')
+
+    def _get_plivo_arguments(self, request):
+        if request.method == 'GET':
+            from_number = request.args.get('From')
+            text = request.args.get('Text')
+            if from_number is None or text is None:
+                raise BadRequest('Both `From` and `Text` parameters are mandatory.')
+
+            return from_number, text
+
+        elif request.method == 'POST':
+            from_number = request.form.get('From', None)
+            text = request.form.get('Text', None)
+            if from_number is None or text is None:
+                raise BadRequest('Both `From` and `Text` parameters are mandatory.')
+
+            return from_number, text
+
+        else:
+            raise MethodNotAllowed('Only GET and POST methods are allowed.')
 
     def _get_provider_from_config(self):
         provider_name = self._config.provider['name']

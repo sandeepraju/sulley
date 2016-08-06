@@ -151,29 +151,90 @@ class TestSulley(unittest.TestCase):
             methods=self.mockedConfig.provider['methods']
         )
 
-    def test_sulley_handler_registration(self):
-        pass
-
-    def test_sulley_url(self):
-        pass
-
-    def test_sulley_url_method(self):
-        pass
-
     def test_sulley_url_not_found(self):
-        pass
+        # should return a 404 when trying to access url that doesn't exist
+        sulley = Sulley(
+            config=self.mockedConfig,
+            app=Flask(self.__class__.__name__),
+            matcher=self.mockedMatcher,
+        provider=self.mockedProvider)
+
+        test_app = sulley._app.test_client()
+        self.assertEqual(test_app.get('/non-existent/').status_code, 404)
 
     def test_sulley_url_method_not_allowed(self):
-        pass
+        sulley = Sulley(
+            config=self.mockedConfig,
+            app=Flask(self.__class__.__name__),
+            matcher=self.mockedMatcher,
+        provider=self.mockedProvider)
+
+        test_app = sulley._app.test_client()
+        self.assertEqual(test_app.post(
+            self.mockedConfig.provider['url']).status_code, 405)
+
+    def test_sulley_url_returns_400_when_mandatory_params_missing(self):
+        sulley = Sulley(
+            config=self.mockedConfig,
+            app=Flask(self.__class__.__name__),
+            matcher=self.mockedMatcher,
+        provider=self.mockedProvider)
+
+        test_app = sulley._app.test_client()
+        self.assertEqual(test_app.get(
+            self.mockedConfig.provider['url']).status_code, 400)
+
+    def test_sulley_url_returns_200_when_mandatory_params_passed(self):
+        sulley = Sulley(
+            config=self.mockedConfig,
+            app=Flask(self.__class__.__name__),
+            matcher=self.mockedMatcher,
+        provider=self.mockedProvider)
+
+        test_app = sulley._app.test_client()
+        self.assertEqual(test_app.get(
+            self.mockedConfig.provider['url'] +
+            '?From=+1234567890&Body=Hey').status_code, 200)
 
     def test_sulley_xml_for_twilio(self):
-        pass
+        sulley = Sulley(
+            config=self.mockedConfig,
+            app=Flask(self.__class__.__name__),
+            matcher=self.mockedMatcher,
+            provider=self.mockedProvider)
+
+        @sulley.default
+        def default(message):
+            pass
+
+        test_app = sulley._app.test_client()
+        self.assertEqual(test_app.get(
+            self.mockedConfig.provider['url'] + '?From=+1234567890&Body=Hey').data,
+                         '<?xml version="1.0" encoding="UTF-8"?><Response></Response>')
 
     def test_sulley_xml_for_plivo(self):
-        pass
+        self.mockedConfig.provider['name'] = 'plivo'
+
+        sulley = Sulley(
+            config=self.mockedConfig,
+            app=Flask(self.__class__.__name__),
+            matcher=self.mockedMatcher,
+            provider=self.mockedProvider)
+
+        @sulley.default
+        def default(message):
+            pass
+
+        test_app = sulley._app.test_client()
+        self.assertEqual(test_app.get(
+            self.mockedConfig.provider['url'] + '?From=+1234567890&Text=Hey').data,
+                         '<?xml version="1.0" encoding="UTF-8"?><Response></Response>')
 
     def test_sulley_pattern_match(self):
         pass
 
     def test_sulley_pattern_doesnt_match(self):
+        pass
+
+    def test_sulley_multi_pattern_registration(self):
         pass
