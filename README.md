@@ -46,7 +46,7 @@ from sulley import Sulley
 
 bot = Sulley()
 
-bot.reply_to(r'hi'):
+bot.reply_to(r'hi')
 def say_hi(message):
     message.reply('hello!')
 
@@ -59,25 +59,20 @@ if __name__ == '__main__':
 python app.py
 ```
 
-### Advanced command configuration
+## Examples
 
-### Default reply handler
-
-### Restricting users
-
-### Delayed responses
-
+###
 
 ## Configuration
 
-Sulley can be configured by creating a `config.json` file. By setting the `SULLEY_CONFIG` environment variable, Sulley readds this file on startup. If this environment variable is not set, it looks for the config.json file in the current working directory.
+Sulley can be configured by creating a `config.json` file. By setting the `SULLEY_CONFIG` environment variable, Sulley reads this file on startup. If this environment variable is not set, it looks for the config.json file in the current working directory.
 
 The `SULLEY_CONFIG` environment variable can be set as follows:
 
 ```
 export SULLEY_CONFIG=/path/to/config.json
 ```
-To quickly get started, grab a copy of the config file from [here]().
+To quickly get started, grab a copy of the config file from [here](./config.json).
 
 ### Configuration options
 
@@ -118,7 +113,7 @@ __Description__: `provider` defines the SMS provider to use. Currently, two popu
 * __key__: For twilio, this is the _<whatever>_ and for plivo this is _Auth ID_. Refer Configuration guides for [Twilio]() and [Plivo]() below for more details on how to configure this option.
 * __secret__: For twilio, this is the _<whatever>_ and for plivo this is _Auth Token_. Refer Configuration guides for [Twilio]() and [Plivo]() below for more details on how to configure this option.
 * __phone__: The phone number (in [E164 format](https://en.wikipedia.org/wiki/E.164). ex: `+10000000000`) where Sulley lives. This number will be used by Sulley's users to talk it. Refer Configuration guides for [Twilio]() and [Plivo]() below for more details on how to configure this option.
-* __url__: The url where Sulley receives HTTP from [_Twilio_](https://www.twilio.com) & [_Plivo_](https://www.plivo.com) for incoming SMSes. Refer Configuration guides for [Twilio]() and [Plivo]() below for more details on how to configure this option.
+* __url__: The url where Sulley receives HTTP(s) requests from [_Twilio_](https://www.twilio.com) & [_Plivo_](https://www.plivo.com) for incoming SMSes. Refer Configuration guides for [Twilio](https://www.twilio.com/help/faq/sms/how-do-i-assign-my-twilio-number-to-my-sms-application) and [Plivo](https://www.plivo.com/docs/getting-started/reply-to-an-incoming-sms/#create-an-application) below for more details on how to configure this option.
 
 A simple example of how the `provider` configuration looks:
 
@@ -136,63 +131,12 @@ A simple example of how the `provider` configuration looks:
 
 The above configuration specifies Sulley to use Twilio to send and receive SMSes.
 
-#### users
-
-__Default__: `[]`
-__Description__: `users` is used to make Sulley accessible to only the users configured here. By default, any user can talk to Sulley. Each item in this list is a JSON object with the following sub options:
-
-* __name__: Name of the user. Example: `"John Doe"`.
-* __phone__: Phone number (in [E164 format](https://en.wikipedia.org/wiki/E.164). ex: `+10000000000`) from which the user will talk to Sulley.
-* __role__: Defines whether the user is an admin or normal user. Allowed values are `"admin"` or `"user"` (default). Admin users can access specific commands marked for admins. More on this can be found in the [reply decorator documentation]().
-
-A simple example of how the `users` configuration looks:
-
-```json
-{
-    "users": [
-        {
-            "name": "John Doe",
-            "phone": "+10000000000",
-            "role": "admin"
-        },
-        {
-            "name": "James P. Sullivan",
-            "phone": "+10000000001",
-            "role": "user"
-        },
-    ]
-}
-```
-
-The above configuration specifies Sulley to only respond to only John Doe and James P. Sullivan.
-
-### Configuration with Twilio
-
-#### Getting <whatever> for 'key'
-
-#### Getting <whatever> for 'secret'
-
-#### Getting Phone number for 'phone'
-
-#### Configuring <> for 'url'
-
-### Configuration with Plivo
-
-#### Getting Auth ID for 'key'
-
-#### Getting Auth Token for 'secret'
-
-#### Getting Phone number for 'phone'
-
-#### Configuring Message URL for 'url'
-
-## Examples
-
 ## FAQ
 
 ## Author
 
-[Sandeep Raju Prabhakar](https://twitter.com/sandeeprajup) <me AT sandeepraju DOT in>
+[Sandeep Raju Prabhakar](https://twitter.com/sandeeprajup)
+
 
 ## License
 
