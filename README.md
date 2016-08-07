@@ -1,4 +1,4 @@
-Sulley (Work in Progress)
+Sulley (Beta)
 =========================
 
 ![James P. Sullivan from Monsters, Inc.](http://i.imgur.com/KvSWLHo.png)
