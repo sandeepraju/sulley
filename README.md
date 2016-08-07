@@ -37,8 +37,6 @@ python setup.py install
 Let us create a simple SMS bot using Sulley that greets it's users.
 
 * Create a file called `app.py`.
-* Grab a copy of `config.json` from here and place in the same directory as `app.py`.
-* Configure Sulley to use Twilio or Plivo by setting `key`, `secret` and `phone` in the config.
 * Add the following to your `app.py` file.
 
 ```python
@@ -53,13 +51,16 @@ def say_hello(message):
 if __name__ == '__main__':
     bot.run()
 ```
+
+* Grab a copy of `config.json` from [here](./config.json) and place it in the same directory as `app.py`.
+* Configure Sulley to use Twilio or Plivo by modifying `key`, `secret` and `phone` in the config.
 * Now, run the app using the following command:
 
 ```bash
 python app.py
 ```
 
-## Examples
+## More Examples
 
 ### Binding functions that reply to simple commands
 
@@ -69,7 +70,7 @@ def say_hello(message):
     message.reply('hello!')
 ```
 
-### Bind multiple commands to single function
+### Bind multiple commands to a single function
 
 ```python
 bot.reply_to(r'hi')
@@ -81,30 +82,31 @@ def say_hello(message):
 ## More complex command matching rules using regex
 
 ```python
-bot.reply_to(r'[0-9]abc]')
+bot.reply_to(r'[0-9]abc')
 def say_hello(message):
   message.reply('hello')
 ```
 
-## Configuration
+## Configuration details
 
 Sulley can be configured by creating a `config.json` file. By setting the `SULLEY_CONFIG` environment variable, Sulley reads this file on startup. If this environment variable is not set, it looks for the config.json file in the current working directory.
 
-The `SULLEY_CONFIG` environment variable can be set as follows:
+The `SULLEY_CONFIG` environment variable can be set like this:
 
 ```
 export SULLEY_CONFIG=/path/to/config.json
 ```
+
 To quickly get started, grab a copy of the config file from [here](./config.json).
 
 ### Configuration options
 
-The configuration options for Sulley has been discussed in detail in the following set of sections.
+The configuration options for Sulley are detailed below.
 
 #### host
 
 __Default__: `"127.0.0.1"`
-__Description__: `host` specifies the binding IP address which Sulley will listen on for requests from [_Twilio_](https://www.twilio.com) & [_Plivo_](https://www.plivo.com) for incoming SMSes.
+__Description__: `host` specifies the binding IP address which Sulley will listen on for requests from [_Twilio_](https://www.twilio.com) or [_Plivo_](https://www.plivo.com) for incoming SMS.
 
 A simple example of how the `host` configuration looks:
 
@@ -117,7 +119,7 @@ A simple example of how the `host` configuration looks:
 #### port
 
 __Default__: `5000`
-__Description__: `port` specifies the port on which Sulley listens for requests from [_Twilio_](https://www.twilio.com) & [_Plivo_](https://www.plivo.com) for incoming SMSes.
+__Description__: `port` specifies the port on which Sulley listens to for requests from [_Twilio_](https://www.twilio.com) or [_Plivo_](https://www.plivo.com) for incoming SMS.
 
 A simple example of how the `port` configuration looks:
 
@@ -133,10 +135,10 @@ __Default__: No default value
 __Description__: `provider` defines the SMS provider to use. Currently, two popular SMS service providers - [Twilio](https://www.twilio.com) & [Plivo](https://www.plivo.com) are supported. The value for this config is a JSON object with the following sub options:
 
 * __name__: Name of the provider in lowercase. Supports `"twilio"` or `"plivo"` currently.
-* __key__: For twilio, this is the _<whatever>_ and for plivo this is _Auth ID_. Refer Configuration guides for [Twilio]() and [Plivo]() below for more details on how to configure this option.
-* __secret__: For twilio, this is the _<whatever>_ and for plivo this is _Auth Token_. Refer Configuration guides for [Twilio]() and [Plivo]() below for more details on how to configure this option.
-* __phone__: The phone number (in [E164 format](https://en.wikipedia.org/wiki/E.164). ex: `+10000000000`) where Sulley lives. This number will be used by Sulley's users to talk it. Refer Configuration guides for [Twilio]() and [Plivo]() below for more details on how to configure this option.
-* __url__: The url where Sulley receives HTTP(s) requests from [_Twilio_](https://www.twilio.com) & [_Plivo_](https://www.plivo.com) for incoming SMSes. Refer Configuration guides for [Twilio](https://www.twilio.com/help/faq/sms/how-do-i-assign-my-twilio-number-to-my-sms-application) and [Plivo](https://www.plivo.com/docs/getting-started/reply-to-an-incoming-sms/#create-an-application) below for more details on how to configure this option.
+* __key__: For twilio, this is the _Account Sid_ and for plivo this is _Auth ID_ found on their respective dashboards.
+* __secret__: For both twilio and plivo, this is the _Auth Token_ found on their respective dashboards.
+* __phone__: The phone number (in [E164 format](https://en.wikipedia.org/wiki/E.164). ex: `+10000000000`) where Sulley lives. This number will be used by Sulley's users to talk it. See how to do this on [Twilio here](https://www.twilio.com/help/faq/sms/how-do-i-assign-my-twilio-number-to-my-sms-application) and for [Plivo here](https://www.plivo.com/docs/getting-started/receive-an-sms/#create-an-application).
+* __url__: The url where Sulley receives HTTP(s) requests from [_Twilio_](https://www.twilio.com) or [_Plivo_](https://www.plivo.com) for incoming SMS. Refer the [Twilio](https://www.twilio.com/help/faq/sms/how-do-i-assign-my-twilio-number-to-my-sms-application) & [Plivo](https://www.plivo.com/docs/getting-started/receive-an-sms/#create-an-application) docs for more information.
 
 A simple example of how the `provider` configuration looks:
 
@@ -152,14 +154,12 @@ A simple example of how the `provider` configuration looks:
 }
 ```
 
-The above configuration specifies Sulley to use Twilio to send and receive SMSes.
-
-## FAQ
+The above configuration specifies Sulley to use `twilio` to send and receive SMS. The phone number to which users send SMS to talk to Sulley is `+10000000000`.
 
 ## Author
 
-[Sandeep Raju Prabhakar](https://twitter.com/sandeeprajup)
-
+[Sandeep Raju Prabhakar](https://twitter.com/sandeeprajup)  
+me[AT]sandeepraju[DOT]in
 
 ## License
 
