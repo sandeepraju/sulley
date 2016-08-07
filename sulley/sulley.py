@@ -93,7 +93,7 @@ class Sulley(object):
             return from_number, text
 
         else:
-            raise MethodNotAllowed('Only GET and POST methods are allowed.')
+            raise MethodNotAllowed('Only `GET` and `POST` methods are allowed.')
 
     def _get_plivo_arguments(self, request):
         if request.method == 'GET':
@@ -115,7 +115,7 @@ class Sulley(object):
             return from_number, text
 
         else:
-            raise MethodNotAllowed('Only GET and POST methods are allowed.')
+            raise MethodNotAllowed('Only `GET` and `POST` methods are allowed.')
 
     def _get_provider_from_config(self):
         provider_name = self._config.provider['name']
@@ -145,6 +145,6 @@ class Sulley(object):
   \___| \__,_||_____||_____||_____||____/
 
             """
-            print ' * Send your SMS to {} and test your application'.format(
+            print ' * Send SMS to {} and test your application'.format(
                 self._config.provider['phone'])
         self._app.run(*args, **kwargs)
