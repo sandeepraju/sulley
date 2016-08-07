@@ -1,6 +1,6 @@
 .PHONY: all clean build install uninstall test
 
-all: clean	
+all: clean
 
 clean:
 	find . -name \*.pyc -delete
@@ -19,4 +19,3 @@ uninstall:
 
 test:
 	python -m unittest discover -s ./tests -p 'test_*.py'
-
