@@ -17,5 +17,7 @@ install:
 uninstall:
 	yes | pip uninstall sulley
 
+pylint: ; @for py in sulley/*.py; do echo "Linting $$py"; pylint --list-msgs -rn $$py; done
+
 test:
 	python -m unittest discover -s ./tests -p 'test_*.py'
