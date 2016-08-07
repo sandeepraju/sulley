@@ -1,9 +1,9 @@
 Sulley (Work in Progress)
 =========================
 
-![Sulley from Monsters, Inc.](http://i.imgur.com/KvSWLHo.png)
+![James P. Sullivan from Monsters, Inc.](http://i.imgur.com/KvSWLHo.png)
 
-With Sulley, you can build SMS bots in just a few lines of code. Powered by Twilio & Plivo, Sulley requires very minimal configuration and code to bring your SMS bot to life!
+With Sulley, you can build SMS bots in just a few lines of code. Sulley is powered by Twilio & Plivo, Sulley requires very minimal configuration and code to bring your SMS bot to life!
 
 This project is inspired from Shuai Lin's [slackbot](https://github.com/lins05/slackbot).
 
@@ -47,7 +47,7 @@ from sulley import Sulley
 bot = Sulley()
 
 bot.reply_to(r'hi')
-def say_hi(message):
+def say_hello(message):
     message.reply('hello!')
 
 if __name__ == '__main__':
@@ -61,7 +61,30 @@ python app.py
 
 ## Examples
 
-###
+### Binding functions that reply to simple commands
+
+```python
+bot.reply_to(r'hi')
+def say_hello(message):
+    message.reply('hello!')
+```
+
+### Bind multiple commands to single function
+
+```python
+bot.reply_to(r'hi')
+bot.reply_to(r'hey')
+def say_hello(message):
+  message.reply('hello')
+```
+
+## More complex command matching rules using regex
+
+```python
+bot.reply_to(r'[0-9]abc]')
+def say_hello(message):
+  message.reply('hello')
+```
 
 ## Configuration
 

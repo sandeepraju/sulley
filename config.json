@@ -8,12 +8,5 @@
         "phone": "+12345678901",
         "url": "/sulley/",
         "methods": ["GET"]
-    },
-    "users": [
-        {
-            "name": "John Doe",
-            "phone": "+10000000000",
-            "role": "admin"
-        }
-    ]
+    }
 }
