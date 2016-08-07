@@ -3,7 +3,7 @@ Sulley (Beta)
 
 ![James P. Sullivan from Monsters, Inc.](http://i.imgur.com/KvSWLHo.png)
 
-With Sulley, you can build SMS bots in just a few lines of code. Sulley is powered by Twilio & Plivo, Sulley requires very minimal configuration and code to bring your SMS bot to life!
+With Sulley, you can build SMS bots in just a few lines of code. Sulley is powered by Twilio & Plivo. It requires very minimal configuration and code to bring your SMS bot to life!
 
 This project is inspired from Shuai Lin's [slackbot](https://github.com/lins05/slackbot).
 
