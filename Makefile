@@ -21,3 +21,6 @@ pylint: ; @for py in sulley/*.py; do echo "Linting $$py"; pylint --list-msgs -rn
 
 test:
 	python -m unittest discover -s ./tests -p 'test_*.py'
+
+push:
+	python setup.py sdist upload -r pypi
