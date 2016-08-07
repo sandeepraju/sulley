@@ -28,5 +28,5 @@ setup(
     ],
     classifiers=[
         'Programming Language :: Python',
-    ],
+    ]
 )
