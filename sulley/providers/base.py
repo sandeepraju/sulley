@@ -1,5 +1,6 @@
 from sulley.exceptions import InvalidConfig
 
+
 class BaseProvider(object):
     def __init__(self, key, secret, phone):
         self.key = key
@@ -12,4 +13,3 @@ class BaseProvider(object):
 
     def send(recipient, message):
         raise NotImplementedError
-

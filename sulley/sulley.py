@@ -18,11 +18,9 @@ class Sulley(object):
         # do nothing by default
         self._default_handler = lambda x: None
 
-        # TODO: add support for provider
-        self._provider = kwargs.get('provider', None) or \
-                         self._get_provider_from_config()
+        self._provider = (kwargs.get('provider', None)
+                          or self._get_provider_from_config())
 
-        # TODO: register global flask handler and return 404 (and 400 when applicable)
         self._app.add_url_rule(
             self._config.provider['url'],
             view_func=self._sms_handler,
@@ -80,7 +78,8 @@ class Sulley(object):
             from_number = request.args.get('From')
             text = request.args.get('Body')
             if from_number is None or text is None:
-                raise BadRequest('Both `From` and `Body` parameters are mandatory.')
+                raise BadRequest('Both `From` and `Body` '
+                                 'parameters are mandatory.')
 
             return from_number, text
 
@@ -88,7 +87,8 @@ class Sulley(object):
             from_number = request.form.get('From', None)
             text = request.form.get('Body', None)
             if from_number is None or text is None:
-                raise BadRequest('Both `From` and `Body` parameters are mandatory.')
+                raise BadRequest('Both `From` and `Body` '
+                                 'parameters are mandatory.')
 
             return from_number, text
 
@@ -100,7 +100,8 @@ class Sulley(object):
             from_number = request.args.get('From')
             text = request.args.get('Text')
             if from_number is None or text is None:
-                raise BadRequest('Both `From` and `Text` parameters are mandatory.')
+                raise BadRequest('Both `From` and `Text` '
+                                 'parameters are mandatory.')
 
             return from_number, text
 
@@ -108,7 +109,8 @@ class Sulley(object):
             from_number = request.form.get('From', None)
             text = request.form.get('Text', None)
             if from_number is None or text is None:
-                raise BadRequest('Both `From` and `Text` parameters are mandatory.')
+                raise BadRequest('Both `From` and `Text` '
+                                 'parameters are mandatory.')
 
             return from_number, text
 

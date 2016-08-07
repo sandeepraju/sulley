@@ -12,7 +12,6 @@ def ping(message):
 # access the query text using the message parameter
 @bot.reply_to('echo')
 def echo(message):
-    # TODO: implement raw_text & text
     message.reply(message.text)
 
 
@@ -22,7 +21,9 @@ def echo(message):
 def say_hi(message):
     message.reply('hey!')
 
-@bot.reply_to('^ola$') # matches only 'ola' not 'hola' or 'olas'.
+
+# matches only 'ola' not 'hola' or 'olas'.
+@bot.reply_to('^ola$')
 def ola(message):
     message.reply('hello')
 
@@ -30,7 +31,7 @@ def ola(message):
 # catch all unexpected keywords / queries with a default handler
 @bot.default
 def say_default(message):
-    message.reply('woof woof.')
+    message.reply('booo.')
 
 if __name__ == '__main__':
     bot.run(debug=True)

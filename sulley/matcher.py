@@ -12,7 +12,7 @@ class Matcher(object):
         try:
             pair = filter(lambda x: x[0].pattern == pattern, self._pairs)[0]
             self._pairs.remove(pair)
-        except Exception as e:
+        except Exception:
             # pattern not found. fail silently
             pass
 

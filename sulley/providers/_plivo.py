@@ -3,8 +3,8 @@ import plivo
 from base import BaseProvider
 from sulley import exceptions
 
+
 class Plivo(BaseProvider):
-    # TODO: change this to accept config obj rather than params
     def __init__(self, *args, **kwargs):
         super(Plivo, self).__init__(*args, **kwargs)
 
