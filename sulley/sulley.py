@@ -145,6 +145,6 @@ class Sulley(object):
   \___| \__,_||_____||_____||_____||____/
 
             """
-            print ' * Send you SMS to {} and test your application'.format(
+            print ' * Send your SMS to {} and test your application'.format(
                 self._config.provider['phone'])
         self._app.run(*args, **kwargs)
