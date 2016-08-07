@@ -8,12 +8,13 @@ class Twilio(BaseProvider):
     def __init__(self, *args, **kwargs):
         super(Twilio, self).__init__(*args, **kwargs)
 
-        self.conn = TwilioRestClient(self.key, self.secret)
+        self.client = TwilioRestClient(self.key, self.secret)
 
     def send(self, recipient, message):
         try:
-            message = client.messages.create(body=message,
+            message = self.client.messages.create(body=message,
                 to=recipient, from_=self.phone)
         except TwilioRestException as e:
-            # make the exception class consistent for users
+            # TODO: this currently hides twilio's exception.
+            #       find a way to pass it on.
             raise exceptions.ProviderError(e.message)

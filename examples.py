@@ -17,10 +17,14 @@ def echo(message):
 
 
 # bind multiple keywords / queries to a single handler
-@bot.reply_to('hi')
+@bot.reply_to('hi')  # matches hi, his, him, hide, etc.
 @bot.reply_to('hello')
 def say_hi(message):
     message.reply('hey!')
+
+@bot.reply_to('^ola$') # matches only 'ola' not 'hola' or 'olas'.
+def ola(message):
+    message.reply('hello')
 
 
 # catch all unexpected keywords / queries with a default handler

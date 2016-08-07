@@ -132,4 +132,17 @@ class Sulley(object):
             raise InvalidConfig('Invalid provider.')
 
     def run(self, *args, **kwargs):
+        if not kwargs.get('quiet', False):
+            print """
+  _____ __ __  _      _        ___  __ __
+ / ___/|  |  || |    | |      /  _]|  |  |
+(   \_ |  |  || |    | |     /  [_ |  |  |
+ \__  ||  |  || |___ | |___ |    _]|  ~  |
+ /  \ ||  :  ||     ||     ||   [_ |___, |
+ \    ||     ||     ||     ||     ||     |
+  \___| \__,_||_____||_____||_____||____/
+
+            """
+            print ' * Send you SMS to {} and test your application'.format(
+                self._config.provider['phone'])
         self._app.run(*args, **kwargs)
