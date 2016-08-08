@@ -9,6 +9,7 @@ from sulley.providers.base import BaseProvider
 from sulley.exceptions import InvalidConfig
 from sulley import Sulley
 
+
 class TestSulley(unittest.TestCase):
     def setUp(self):
         self.mockedConfig = self._generateMockedConfig({
@@ -21,14 +22,7 @@ class TestSulley(unittest.TestCase):
                 "phone": "+12345678901",
                 "url": "/sulley-test-url/",
                 "methods": ["GET"]
-            },
-            "users": [
-                {
-                    "name": "John Doe",
-                    "phone": "+10000000000",
-                    "role": "admin"
-                }
-            ]
+            }
         })
         self.mockedApp = self._generateMockedApp(self.__class__.__name__)
         self.mockedMatcher = self._generateMockedMatcher()
