@@ -1,4 +1,4 @@
-.PHONY: all clean build install uninstall test
+.PHONY: all clean build install uninstall pylint test push
 
 all: clean
 
