@@ -1,4 +1,6 @@
 class Message(object):
+    """`Message` stores the SMS text and the originating phone number.
+    """
     def __init__(self, from_number, text, provider=None, *args, **kwargs):
         self.from_number = from_number
         self.text = text
