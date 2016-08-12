@@ -1,1 +1,1 @@
-include LICENSE.txt README.md
+include LICENSE README.md config.json

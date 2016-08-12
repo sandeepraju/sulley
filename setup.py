@@ -9,9 +9,10 @@ setup(
                  ' Sulley requires very minimal configuration and '
                  'code to bring your bot to life!'),
     long_description=('For more information, visit:'
-                      ' https://sandeepraju.github.io/sulley/'),
+                      ' https://github.com/sandeepraju/sulley'),
     author='Sandeep Raju Prabhakar',
     author_email='me@sandeepraju.in',
+    license=open('LICENSE', 'r').read(),
     url='https://github.com/sandeepraju/sulley',
     download_url='https://github.com/sandeepraju/sulley/archive/master.zip',
     install_requires=[
