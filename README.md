@@ -44,7 +44,7 @@ from sulley import Sulley
 
 bot = Sulley()
 
-bot.reply_to(r'hi')
+@bot.reply_to(r'hi')
 def say_hello(message):
     message.reply('hello!')
 
@@ -65,7 +65,7 @@ python app.py
 ### Binding functions that reply to simple commands
 
 ```python
-bot.reply_to(r'hi')
+@bot.reply_to(r'hi')
 def say_hello(message):
     message.reply('hello!')
 ```
@@ -73,8 +73,8 @@ def say_hello(message):
 ### Bind multiple commands to a single function
 
 ```python
-bot.reply_to(r'hi')
-bot.reply_to(r'hey')
+@bot.reply_to(r'hi')
+@bot.reply_to(r'hey')
 def say_hello(message):
   message.reply('hello')
 ```
@@ -82,7 +82,7 @@ def say_hello(message):
 ### More complex command matching rules using regex
 
 ```python
-bot.reply_to(r'[0-9]abc')
+@bot.reply_to(r'[0-9]abc')
 def say_hello(message):
   message.reply('hello')
 ```
