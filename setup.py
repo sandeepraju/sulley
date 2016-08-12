@@ -3,7 +3,7 @@ from setuptools import setup
 setup(
     name='sulley',
     packages=['sulley'],
-    version='0.0.2b0',
+    version='0.1.0b0',
     description=('With Sulley, you can build SMS bots in just'
                  ' a few lines of code. Powered by Twilio & Plivo,'
                  ' Sulley requires very minimal configuration and '
@@ -29,5 +29,10 @@ setup(
     ],
     classifiers=[
         'Programming Language :: Python',
+        'Intended Audience :: Developers',
+        'Operating System :: OS Independent',
+        'License :: OSI Approved :: BSD License',
+        'Topic :: Software Development :: Libraries :: Python Modules'
+        'Development Status :: 4 - Beta',
     ]
 )

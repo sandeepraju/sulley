@@ -1,4 +1,5 @@
 import unittest
+import re
 
 from sulley.matcher import Matcher
 
@@ -31,7 +32,7 @@ class TestMatcher(unittest.TestCase):
 
         # should call the first matching function
         self.assertEqual(self.matcher.match('abc')(100), 100)
-    
+
     def test_matcher_deregister_when_no_such_pattern_exist(self):
         # should fail silently
         self.matcher.deregister('^abc')
@@ -60,3 +61,12 @@ class TestMatcher(unittest.TestCase):
 
         # should match the second pattern
         self.assertEqual(self.matcher.match('abc')(10), 100)
+
+    def test_matcher_register_when_pattern_is_a_regex_obj(self):
+        self.matcher.register(re.compile('^abc$', re.IGNORECASE), lambda x: x)
+
+        self.assertEqual(self.matcher.match('abc')(10), 10)
+        self.assertEqual(self.matcher.match('aBc')(10), 10)
+        self.assertEqual(self.matcher.match('ABC')(10), 10)
+
+        self.assertEqual(self.matcher.match(' ABC'), None)

@@ -6,7 +6,12 @@ class Matcher(object):
         self._pairs = []
 
     def register(self, pattern, func):
-        self._pairs.append((re.compile(pattern), func))
+        if pattern.__class__.__name__ == 'SRE_Pattern':
+            # a compiled pattern object is passed directly
+            self._pairs.append((pattern, func))
+        else:
+            # a pattern is passed
+            self._pairs.append((re.compile(str(pattern)), func))
 
     def deregister(self, pattern):
         try:

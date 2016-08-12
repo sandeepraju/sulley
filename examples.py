@@ -1,7 +1,8 @@
+import re
+
 from sulley import Sulley
 
 bot = Sulley()
-
 
 # bind handlers to keyword / pattern based queries
 @bot.reply_to('ping')
@@ -27,6 +28,11 @@ def say_hi(message):
 def ola(message):
     message.reply('hello')
 
+# even better, pass a python compiled regex
+# matches 'List', 'list', 'LIST', 'LiSt', etc.
+@bot.reply_to(re.compile('^list', re.IGNORECASE))
+def launch(message):
+    message.reply('listing items')
 
 # catch all unexpected keywords / queries with a default handler
 @bot.default
