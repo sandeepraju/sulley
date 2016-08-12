@@ -79,13 +79,23 @@ def say_hello(message):
   message.reply('hello')
 ```
 
-## More complex command matching rules using regex
+### More complex command matching rules using regex
 
 ```python
 bot.reply_to(r'[0-9]abc')
 def say_hello(message):
   message.reply('hello')
 ```
+
+### Pass native regex objects for more flexibility
+
+```python
+@bot.reply_to(re.compile('^list', re.IGNORECASE))
+def launch(message):
+    message.reply('listing items')
+```
+
+For more examples, check out the [examples file](./examples.py).
 
 ## Configuration details
 
