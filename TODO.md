@@ -1,7 +1,7 @@
 - [ ] better docstrings & code comments
 - [ ] more examples
 - [ ] remove unwanted args and kwargs in constructors and other functions
-- [ ] change camel case names to underscore based names in test cases
+- [x] change camel case names to underscore based names in test cases
 - [ ] retrospect message OOD (message.reply?)
 - [ ] adding and removing a new provider should be easy
 - [ ] add FAQ in README
