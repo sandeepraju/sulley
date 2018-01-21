@@ -1,5 +1,5 @@
-Sulley (Beta)
-=========================
+Sulley
+======
 
 ![James P. Sullivan from Monsters, Inc.](http://i.imgur.com/KvSWLHo.png)
 
