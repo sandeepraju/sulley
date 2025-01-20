@@ -18,7 +18,7 @@ setup(
     install_requires=[
         'plivo==0.11.1',
         'twilio==5.4.0',
-        'Flask==2.2.5'
+        'Flask==3.1.0'
     ],
     tests_require=[
         'mock==2.0.0',
