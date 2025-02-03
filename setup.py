@@ -22,7 +22,7 @@ setup(
     ],
     tests_require=[
         'mock==5.1.0',
-        'pylint==3.3.3'
+        'pylint==3.3.4'
     ],
     keywords=[
         'sms', 'message', 'twilio', 'plivo',
