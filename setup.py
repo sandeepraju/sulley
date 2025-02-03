@@ -16,7 +16,7 @@ setup(
     url='https://github.com/sandeepraju/sulley',
     download_url='https://github.com/sandeepraju/sulley/archive/master.zip',
     install_requires=[
-        'plivo==4.58.3',
+        'plivo==4.58.4',
         'twilio==9.4.3',
         'Flask==3.1.0'
     ],
