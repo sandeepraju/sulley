@@ -21,7 +21,7 @@ setup(
         'Flask==3.1.0'
     ],
     tests_require=[
-        'mock==5.1.0',
+        'mock==5.2.0',
         'pylint==3.3.3'
     ],
     keywords=[
