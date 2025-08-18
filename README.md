@@ -1,7 +1,4 @@
-Sulley
-======
-
-![James P. Sullivan from Monsters, Inc.](http://i.imgur.com/KvSWLHo.png)
+# Sulley
 
 With Sulley, you can build SMS bots in just a few lines of code. Powered by Twilio & Plivo, it requires very minimal configuration and code to bring your SMS bot to life!
 
@@ -178,6 +175,92 @@ A simple example of how the `provider` configuration looks:
 ```
 
 The above configuration specifies Sulley to use `twilio` to send and receive SMS. The phone number to which users send SMS to talk to Sulley is `+10000000000`.
+
+## FAQ
+
+### General Questions
+
+**Q: What is Sulley?**
+A: Sulley is a Python framework for building SMS bots with minimal configuration. It provides a simple decorator-based API similar to popular bot frameworks like slackbot.
+
+**Q: Which SMS providers does Sulley support?**
+A: Sulley currently supports Twilio and Plivo out of the box. The framework is designed to be easily extensible for other providers.
+
+**Q: What Python versions are supported?**
+A: Sulley requires Python 3.8 or higher. We recommend using Python 3.11+ for the best experience.
+
+**Q: Is Sulley free to use?**
+A: Sulley itself is free and open source. However, you'll need to pay for SMS services from Twilio or Plivo.
+
+### Setup and Configuration
+
+**Q: How do I get started with Sulley?**
+A: Install Sulley using Poetry (`poetry install`) or pip (`pip install sulley`), create a config.json file with your SMS provider credentials, and start building your bot with the `@bot.reply_to()` decorator.
+
+**Q: How do I configure my SMS provider?**
+A: Create a `config.json` file with your provider credentials. See the configuration section above for detailed examples.
+
+**Q: Can I use environment variables for configuration?**
+A: Yes! Set the `SULLEY_CONFIG` environment variable to point to your configuration file: `export SULLEY_CONFIG=/path/to/config.json`
+
+**Q: How do I test my bot locally?**
+A: Use a tool like ngrok to expose your local server to the internet, then configure your SMS provider's webhook URL to point to your ngrok URL.
+
+### Development and Usage
+
+**Q: How do I handle different types of messages?**
+A: Use the `@bot.reply_to()` decorator with regex patterns to match different message types. You can use simple strings or complex regex patterns.
+
+**Q: Can I use compiled regex patterns?**
+A: Yes! You can pass compiled regex objects directly: `@bot.reply_to(re.compile(r'pattern', re.IGNORECASE))`
+
+**Q: How do I handle messages that don't match any patterns?**
+A: Use the `@bot.default` decorator to set a default handler for unmatched messages.
+
+**Q: How do I access the original message text?**
+A: Use `message.get_raw_text()` to get the original message, or `message.get_matched_text()` to get the portion that matched your regex pattern.
+
+**Q: Can I send messages to different phone numbers?**
+A: Currently, Sulley is designed for replying to incoming messages. For sending to different numbers, you'd need to use the provider's API directly.
+
+### Troubleshooting
+
+**Q: My bot isn't receiving messages. What's wrong?**
+A: Check that your webhook URL is correctly configured in your SMS provider dashboard and that your server is accessible from the internet.
+
+**Q: I'm getting "Invalid provider" errors.**
+A: Make sure your config.json has the correct provider name ("twilio" or "plivo") and all required credentials.
+
+**Q: My regex patterns aren't matching.**
+A: Remember that regex patterns match from the beginning of the string by default. Use `^` and `$` anchors if you need exact matches, or `.*` for flexible matching.
+
+**Q: How do I debug my bot?**
+A: Run your bot with `debug=True` to see Flask debug output, and check the console for any error messages.
+
+### Advanced Usage
+
+**Q: Can I use multiple decorators on the same function?**
+A: Yes! You can use multiple `@bot.reply_to()` decorators to handle different patterns with the same function.
+
+**Q: How do I handle complex conversations?**
+A: You can implement state management in your handlers by storing conversation state in variables or a database.
+
+**Q: Can I integrate with external APIs?**
+A: Absolutely! Your handler functions can make HTTP requests, call databases, or integrate with any Python library.
+
+**Q: How do I deploy my bot to production?**
+A: Deploy your Flask app to any platform that supports Python (Heroku, AWS, Google Cloud, etc.) and configure your SMS provider's webhook URL to point to your production server.
+
+### Performance and Scaling
+
+**Q: How many messages can Sulley handle?**
+A: Sulley's performance depends on your Flask server configuration and the complexity of your handlers. For high-volume applications, consider using async handlers and proper load balancing.
+
+**Q: Can I use Sulley with async/await?**
+A: The current version uses synchronous Flask. For async support, you might need to use an async web framework like FastAPI or aiohttp.
+
+**Q: How do I monitor my bot's performance?**
+A: Add logging to your handlers and use Flask's built-in logging capabilities. You can also integrate with monitoring services like Sentry or DataDog.
 
 ## Development
 

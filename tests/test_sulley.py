@@ -65,7 +65,7 @@ class TestSulley(unittest.TestCase):
 
         # with no arguments
         sulley.run()
-        self.mocked_app.run.assert_called_once_with()
+        self.mocked_app.run.assert_called_once_with(host='127.0.0.1', port='5000', debug=False)
 
     def test_sulley_run_with_params(self):
         sulley = Sulley(
@@ -77,7 +77,7 @@ class TestSulley(unittest.TestCase):
 
         # with few flask params
         sulley.run(debug=True)
-        self.mocked_app.run.assert_called_once_with(debug=True)
+        self.mocked_app.run.assert_called_once_with(host='127.0.0.1', port='5000', debug=True)
 
     def test_sulley_default_decorator_wrap_side_effects(self):
         sulley = Sulley(
