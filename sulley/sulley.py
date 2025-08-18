@@ -2,29 +2,31 @@ from flask import Flask, Response, request
 from functools import wraps
 from werkzeug.exceptions import BadRequest, MethodNotAllowed
 
-from config import Config
-from message import Message
-from matcher import Matcher
-from exceptions import InvalidConfig
-from providers import twilio, plivo
+from .config import Config
+from .message import Message
+from .matcher import Matcher
+from .exceptions import InvalidConfig
+from .providers import twilio, plivo
 
 
 class Sulley(object):
     def __init__(self, *args, **kwargs):
-        self._config = kwargs.get('config', None) or Config()
-        self._app = kwargs.get('app', None) or Flask(self.__class__.__name__)
-        self._matcher = kwargs.get('matcher', None) or Matcher()
+        self._config = kwargs.get("config", None) or Config()
+        self._app = kwargs.get("app", None) or Flask(self.__class__.__name__)
+        self._matcher = kwargs.get("matcher", None) or Matcher()
 
         # do nothing by default
         self._default_handler = lambda x: None
 
-        self._provider = (kwargs.get('provider', None)
-                          or self._get_provider_from_config())
+        self._provider = (
+            kwargs.get("provider", None) or self._get_provider_from_config()
+        )
 
         self._app.add_url_rule(
-            self._config.provider['url'],
+            self._config.provider["url"],
             view_func=self._sms_handler,
-            methods=self._config.provider['methods'])
+            methods=self._config.provider["methods"],
+        )
 
     def default(self, func):
         # wrap the passed handler
@@ -64,78 +66,77 @@ class Sulley(object):
 
         # TODO: handle providers
         xml = '<?xml version="1.0" encoding="UTF-8"?><Response></Response>'
-        return Response(xml, mimetype='text/xml')
+        return Response(xml, mimetype="text/xml")
 
     def _get_request_arguments(self, request):
-        provider_name = self._config.provider['name']
-        if provider_name == 'twilio':
+        provider_name = self._config.provider["name"]
+        if provider_name == "twilio":
             return self._get_twilio_arguments(request)
-        elif provider_name == 'plivo':
+        elif provider_name == "plivo":
             return self._get_plivo_arguments(request)
 
     def _get_twilio_arguments(self, request):
-        if request.method == 'GET':
-            from_number = request.args.get('From')
-            text = request.args.get('Body')
+        if request.method == "GET":
+            from_number = request.args.get("From")
+            text = request.args.get("Body")
             if from_number is None or text is None:
-                raise BadRequest('Both `From` and `Body` '
-                                 'parameters are mandatory.')
+                raise BadRequest("Both `From` and `Body` " "parameters are mandatory.")
 
             return from_number, text
 
-        elif request.method == 'POST':
-            from_number = request.form.get('From', None)
-            text = request.form.get('Body', None)
+        elif request.method == "POST":
+            from_number = request.form.get("From", None)
+            text = request.form.get("Body", None)
             if from_number is None or text is None:
-                raise BadRequest('Both `From` and `Body` '
-                                 'parameters are mandatory.')
+                raise BadRequest("Both `From` and `Body` " "parameters are mandatory.")
 
             return from_number, text
 
         else:
-            raise MethodNotAllowed('Only `GET` and `POST` methods are allowed.')
+            raise MethodNotAllowed("Only `GET` and `POST` methods are allowed.")
 
     def _get_plivo_arguments(self, request):
-        if request.method == 'GET':
-            from_number = request.args.get('From')
-            text = request.args.get('Text')
+        if request.method == "GET":
+            from_number = request.args.get("From")
+            text = request.args.get("Text")
             if from_number is None or text is None:
-                raise BadRequest('Both `From` and `Text` '
-                                 'parameters are mandatory.')
+                raise BadRequest("Both `From` and `Text` " "parameters are mandatory.")
 
             return from_number, text
 
-        elif request.method == 'POST':
-            from_number = request.form.get('From', None)
-            text = request.form.get('Text', None)
+        elif request.method == "POST":
+            from_number = request.form.get("From", None)
+            text = request.form.get("Text", None)
             if from_number is None or text is None:
-                raise BadRequest('Both `From` and `Text` '
-                                 'parameters are mandatory.')
+                raise BadRequest("Both `From` and `Text` " "parameters are mandatory.")
 
             return from_number, text
 
         else:
-            raise MethodNotAllowed('Only `GET` and `POST` methods are allowed.')
+            raise MethodNotAllowed("Only `GET` and `POST` methods are allowed.")
 
     def _get_provider_from_config(self):
-        provider_name = self._config.provider['name']
+        provider_name = self._config.provider["name"]
 
-        if provider_name == 'twilio':
+        if provider_name == "twilio":
             return twilio.Twilio(
-                self._config.provider['key'],
-                self._config.provider['secret'],
-                self._config.provider['phone'])
-        elif provider_name == 'plivo':
+                self._config.provider["key"],
+                self._config.provider["secret"],
+                self._config.provider["phone"],
+            )
+        elif provider_name == "plivo":
             return plivo.Plivo(
-                self._config.provider['key'],
-                self._config.provider['secret'],
-                self._config.provider['phone'])
+                self._config.provider["key"],
+                self._config.provider["secret"],
+                self._config.provider["phone"],
+            )
         else:
-            raise InvalidConfig('Invalid provider.')
+            raise InvalidConfig("Invalid provider.")
 
     def run(self, *args, **kwargs):
-        if not kwargs.get('quiet', False):
-            print """
+        if not kwargs.get("quiet", False):
+            print(
+                r"""
   _____ __ __  _      _        ___  __ __
  / ___/|  |  || |    | |      /  _]|  |  |
 (   \_ |  |  || |    | |     /  [_ |  |  |
@@ -145,6 +146,10 @@ class Sulley(object):
   \___| \__,_||_____||_____||_____||____/
 
             """
-            print ' * Send SMS to {} and test your application'.format(
-                self._config.provider['phone'])
+            )
+            print(
+                " * Send SMS to {} and test your application".format(
+                    self._config.provider["phone"]
+                )
+            )
         self._app.run(*args, **kwargs)

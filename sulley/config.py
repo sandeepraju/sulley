@@ -1,19 +1,40 @@
 import json
 import os
+from .exceptions import InvalidConfig
 
 
 class Config(object):
     def __init__(self, *args, **kwargs):
-        self.__dict__.update(self._load())
+        self.config_file = kwargs.get("config_file", None) or self._get_config_file()
+        self.config = self._load_config()
+        # Set dynamic attributes for backward compatibility
+        self.__dict__.update(self.config)
 
-    def _load(self):
-        config_path = self._get_config_path()
-        with open(config_path, 'r') as config_file:
-            return json.loads(config_file.read())
+    def _get_config_file(self):
+        return os.environ.get("SULLEY_CONFIG", "config.json")
 
-    def _get_config_path(self):
-        return os.environ.get(
-            'SULLEY_CONFIG', os.path.join(os.getcwd(), 'config.json'))
+    def _load_config(self):
+        try:
+            with open(self.config_file, "r") as f:
+                return json.load(f)
+        except IOError:
+            raise InvalidConfig("Config file not found.")
+        except ValueError:
+            raise InvalidConfig("Invalid JSON in config file.")
+
+    @property
+    def host(self):
+        return self.config.get("host", "127.0.0.1")
+
+    @property
+    def port(self):
+        return self.config.get("port", 5000)
+
+    @property
+    def provider(self):
+        return self.config.get("provider", {})
 
     def reload(self):
-        self.__dict__.update(self._load())
+        """Reload configuration from file"""
+        self.config = self._load_config()
+        self.__dict__.update(self.config)

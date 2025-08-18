@@ -6,10 +6,11 @@ class BaseProvider(object):
         self.key = key
         self.secret = secret
 
-        if not phone.startswith('+'):
-            raise InvalidConfig('Invalid phone number. '
-                                'Phone numbers should be in E.164 format.')
+        if not phone.startswith("+"):
+            raise InvalidConfig(
+                "Invalid phone number. " "Phone numbers should be in E.164 format."
+            )
         self.phone = phone
 
-    def send(recipient, message):
+    def send(self, recipient, message):
         raise NotImplementedError

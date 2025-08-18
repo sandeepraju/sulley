@@ -7,7 +7,35 @@ With Sulley, you can build SMS bots in just a few lines of code. Powered by Twil
 
 This project is inspired from Shuai Lin's [slackbot](https://github.com/lins05/slackbot).
 
+## Requirements
+
+- Python 3.8 or higher
+- Poetry (for dependency management)
+
 ## Installation
+
+### Using Poetry (Recommended)
+
+1. Install Poetry if you haven't already:
+```bash
+curl -sSL https://install.python-poetry.org | python3 -
+```
+
+2. Clone the repository:
+```bash
+git clone https://github.com/sandeepraju/sulley.git
+cd sulley
+```
+
+3. Install dependencies:
+```bash
+poetry install
+```
+
+4. Activate the virtual environment:
+```bash
+poetry shell
+```
 
 ### From PyPI
 
@@ -15,21 +43,6 @@ Sulley can be installed from PyPI by running the following command:
 
 ```bash
 pip install sulley
-```
-
-### From source code
-
-* Get the source code by cloning the repository
-
-```bash
-git clone https://github.com/sandeepraju/sulley.git
-```
-
-* In the project directory, run the `setup.py`
-
-```bash
-cd sulley/
-python setup.py install
 ```
 
 ## Getting started
@@ -165,6 +178,38 @@ A simple example of how the `provider` configuration looks:
 ```
 
 The above configuration specifies Sulley to use `twilio` to send and receive SMS. The phone number to which users send SMS to talk to Sulley is `+10000000000`.
+
+## Development
+
+### Running Tests
+
+```bash
+poetry run pytest
+```
+
+### Code Quality
+
+```bash
+# Format code
+poetry run black .
+
+# Sort imports
+poetry run isort .
+
+# Lint code
+poetry run flake8
+
+# Type checking
+poetry run mypy sulley/
+```
+
+### Pre-commit Hooks
+
+Install pre-commit hooks to automatically format and lint your code:
+
+```bash
+poetry run pre-commit install
+```
 
 ## Author
 
